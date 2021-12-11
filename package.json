@@ -1,0 +1,28 @@
+{
+  "name": "squid-game",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build",
+    "start": "parcel",
+    "lint": "eslint . --fix"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "parcel": "^2.0.1",
+    "parcel-reporter-static-files-copy": "^1.3.1"
+  },
+  "dependencies": {
+    "three": "^0.134.0",
+    "yuka": "^0.7.6"
+  }
+}
