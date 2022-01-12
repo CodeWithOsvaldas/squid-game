@@ -20,6 +20,12 @@ const app = initializeApp(firebaseConfig);
 
 const ANIMATION_DEAD_ARRAY = 'dead_array';
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(new URL('../service-worker.js', import.meta.url), { type: 'module' });
+  });
+}
+
 class SquidGame {
   constructor() {
     this.init();
