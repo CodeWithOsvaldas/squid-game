@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import * as YUKA from 'yuka';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils';
+import { initializeApp } from 'firebase/app';
 import { Player } from './player';
 import { Doll } from './doll';
 import { NpcPlayer } from './npcPlayer';
@@ -12,6 +13,10 @@ import { DOLL_STATES, PLAYER_STATES } from './states';
 import { getRandomArbitrary, getRandomInt } from './utils';
 import { getRandomBehavior } from './behaviors';
 import { soundManager } from './soundManager';
+
+import { firebaseConfig } from '../firebaseConfig';
+
+const app = initializeApp(firebaseConfig);
 
 const ANIMATION_DEAD_ARRAY = 'dead_array';
 
