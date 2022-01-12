@@ -1,6 +1,7 @@
-body {
+body, html {
     margin:0;
     overflow:hidden;
+    position: fixed;
 }
 
 .timer {
