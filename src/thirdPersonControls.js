@@ -10,7 +10,7 @@ class ThirdPersonControls {
     this.cameraOffset = new Vector3(0, 200, 10);
     this.cameraMovementSpeed = 2.5;
     this.brakingForce = 10;
-
+    this.startY = 0;
     this.input = {
       forward: false,
       backward: false,
@@ -20,11 +20,17 @@ class ThirdPersonControls {
     };
     this.keyDownHandler = onKeyDown.bind(this);
     this.keyUpHandler = onKeyUp.bind(this);
+    this.onTouchStart = onTouchStart.bind(this);
+    this.onTouchMove = onTouchMove.bind(this);
+    this.onTouchEnd = onTouchEnd.bind(this);
   }
 
-  connect() {
+  connect(renderer) {
     document.addEventListener('keydown', this.keyDownHandler, false);
     document.addEventListener('keyup', this.keyUpHandler, false);
+    renderer.domElement.addEventListener('touchstart', this.onTouchStart, false);
+    renderer.domElement.addEventListener('touchmove', this.onTouchMove, false);
+    renderer.domElement.addEventListener('touchend', this.onTouchEnd, false);
   }
 
   update(delta) {
@@ -61,6 +67,39 @@ class ThirdPersonControls {
     if (currentStateId === PLAYER_STATES.DANCE && this.camera.position.z !== 0) {
       this.camera.position.z = 0;
     }
+  }
+}
+
+function onTouchStart(event) {
+  this.startY = event.touches[0].pageY;
+}
+
+function onTouchEnd() {
+  this.startY = 0;
+  this.input = {
+    ...this.input,
+    shift: false,
+    forward: false,
+    backward: false,
+  };
+}
+
+function onTouchMove(event) {
+  const deltaY = (event.touches[0].pageY - this.startY);
+  if (deltaY < 0) {
+    this.input = {
+      ...this.input,
+      shift: true,
+      forward: true,
+      backward: false,
+    };
+  } else if (deltaY > 0) {
+    this.input = {
+      ...this.input,
+      shift: true,
+      forward: false,
+      backward: true,
+    };
   }
 }
 

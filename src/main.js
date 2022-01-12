@@ -108,7 +108,7 @@ class SquidGame {
   }
 
   startGame() {
-    this.controls.connect();
+    this.controls.connect(this.renderer);
     this.startTimer();
     this.entityManager.entities
       .filter((entity) => entity instanceof NpcPlayer)
@@ -481,6 +481,7 @@ class SquidGame {
   }
 
   onFinishedLoading() {
+    this.handleResize();
     const loadingScreen = document.getElementById('loading-screen');
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
@@ -503,6 +504,14 @@ class SquidGame {
       this.entityManager.update(delta);
       this.renderer.render(this.scene, this.camera);
     });
+  }
+
+  handleResize() {
+    if (this.camera && this.renderer) {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
   }
 }
 
