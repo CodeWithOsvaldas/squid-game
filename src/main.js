@@ -20,12 +20,6 @@ const app = initializeApp(firebaseConfig);
 
 const ANIMATION_DEAD_ARRAY = 'dead_array';
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(new URL('../service-worker.js', import.meta.url), { type: 'module' });
-  });
-}
-
 class SquidGame {
   constructor() {
     this.init();
@@ -37,6 +31,7 @@ class SquidGame {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
+    this.aspect = window.innerWidth / window.innerHeight;
     const container = document.createElement('div');
     container.appendChild(this.renderer.domElement);
     document.body.appendChild(container);
@@ -143,13 +138,16 @@ class SquidGame {
     }, 1000);
   }
 
-  onGameEnd() {
+  onGameEnd = () => {
     const intro = document.getElementById('intro');
     const startButton = document.getElementById('start');
     startButton.innerText = 'Restart';
-    startButton.addEventListener('click', () => { window.location.reload(); }, false);
+    startButton.addEventListener('click', () => {
+      const currentURL = window.location.pathname + window.location.search + window.location.hash;
+      window.location.href = currentURL;
+    }, false);
     intro.classList.remove('hidden');
-  }
+  };
 
   addTriggers() {
     const size = new YUKA.Vector3(50, 5, 10);
@@ -481,7 +479,6 @@ class SquidGame {
   }
 
   onFinishedLoading() {
-    this.handleResize();
     const loadingScreen = document.getElementById('loading-screen');
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
@@ -499,6 +496,7 @@ class SquidGame {
   animate() {
     requestAnimationFrame(() => {
       this.animate();
+      this.handleResize();
       const delta = this.time.update().getDelta();
       this.controls.update(delta);
       this.entityManager.update(delta);
@@ -507,8 +505,10 @@ class SquidGame {
   }
 
   handleResize() {
-    if (this.camera && this.renderer) {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
+    const newAspect = window.innerWidth / window.innerHeight;
+    if (this.aspect !== newAspect) {
+      this.aspect = newAspect;
+      this.camera.aspect = newAspect;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
@@ -519,5 +519,11 @@ class SquidGame {
 let APP = null;
 
 window.addEventListener('DOMContentLoaded', () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(
+      new URL('../static/resources/service-worker.js', import.meta.url),
+      { type: 'module' },
+    );
+  }
   APP = new SquidGame();
 });

@@ -74,16 +74,6 @@ function onTouchStart(event) {
   this.startY = event.touches[0].pageY;
 }
 
-function onTouchEnd() {
-  this.startY = 0;
-  this.input = {
-    ...this.input,
-    shift: false,
-    forward: false,
-    backward: false,
-  };
-}
-
 function onTouchMove(event) {
   const deltaY = (event.touches[0].pageY - this.startY);
   if (deltaY < 0) {
@@ -101,6 +91,16 @@ function onTouchMove(event) {
       backward: true,
     };
   }
+}
+
+function onTouchEnd() {
+  this.startY = 0;
+  this.input = {
+    ...this.input,
+    shift: false,
+    forward: false,
+    backward: false,
+  };
 }
 
 function onKeyDown(event) {

@@ -28,6 +28,8 @@
     "firebase": "^9.6.2",
     "three": "^0.134.0",
     "workbox-recipes": "^6.4.2",
+    "workbox-routing": "^6.4.2",
+    "workbox-strategies": "^6.4.2",
     "yuka": "^0.7.6"
   }
 }
